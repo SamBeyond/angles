@@ -34,7 +34,6 @@ object CrawlTwitter extends App {
   work.enqueue(new CrawlUris)
   work.enqueue(new ExtractMetadata)
   work.enqueue(new ExtractNamedEntities)
-  work.enqueue(new IndexArticles)
   work.enqueue(new MarkGermanTweets)
 
   val since = new DateTime().minusDays(5)
