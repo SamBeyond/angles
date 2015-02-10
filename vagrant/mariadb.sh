@@ -44,6 +44,7 @@ echo "[mysqld]" > /etc/mysql/conf.d/vagrant.cnf
 echo "bind-address = 0.0.0.0" >> /etc/mysql/conf.d/vagrant.cnf
 
 mysql -uroot -p$MYSQL_PASS < ${VAGRANT_SYNCED_DIR}/vagrant/vagrant/wangle-initial.sql
+mysql -uroot -p$MYSQL_PASS < ${VAGRANT_SYNCED_DIR}/vagrant/vagrant/wangle-change.sql
 
 echo "Database schema wangle has been imported"
 

@@ -62,7 +62,7 @@ object Storage {
   }
 
   def expandedUrlsInTweetsSince(since: DateTime) = {
-    (sql"SELECT * FROM tweets WHERE creation_time >= ${since}" map { rs =>
+    (sql"SELECT * FROM tweets WHERE creation_time >= ${since} and follow_retweets=4" map { rs =>
       val status = Tweet(rs).status()
 
       if (status.getURLEntities.length > 0) {
@@ -294,6 +294,14 @@ object Storage {
       update(Tweet).set(
         Tweet.column.followRetweets -> 3
       ).where.eq(Tweet.column.followRetweets, 0)
+    }
+  }
+
+  def markTweetCrawled(tweet: Long) = {
+    withSQL {
+      update(Tweet).set(
+        Tweet.column.followRetweets -> 0
+      ).where.eq(Tweet.column.id, tweet)
     }
   }
 }

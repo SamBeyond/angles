@@ -31,10 +31,6 @@ object CrawlTwitter extends App {
   work.enqueue(new FetchRetweets)
   work.enqueue(new FetchExplorers)
   work.enqueue(new FetchTimelines)
-  work.enqueue(new CrawlUris)
-  work.enqueue(new ExtractMetadata)
-  work.enqueue(new ExtractNamedEntities)
-  work.enqueue(new MarkGermanTweets)
 
   val since = new DateTime().minusDays(5)
   do {
@@ -47,7 +43,11 @@ object CrawlTwitter extends App {
         if (tex.exceededRateLimitation()) {
           val limit = tex.getRateLimitStatus
 
-          val sleepTime = limit.getSecondsUntilReset + 1
+          var sleepTime = limit.getSecondsUntilReset + 1
+
+          if (sleepTime < 0) {
+            sleepTime = 5
+          }
 
           log.info("Rate limit exceeded, going to sleep for {} seconds, will try again at {}", sleepTime,
             new DateTime(limit.getResetTimeInSeconds.asInstanceOf[Long] * 1000).toString("HH:mm:ss"))
