@@ -17,6 +17,7 @@
  */
 package io.ssc.angles.pipeline.batch
 
+import io.ssc.angles.Config
 import io.ssc.angles.pipeline._
 import org.joda.time.DateTime
 import org.slf4j.LoggerFactory
@@ -24,7 +25,7 @@ import org.slf4j.LoggerFactory
 object ExtractData extends App {
   val log = LoggerFactory.getLogger(UpdateStoryIndex.getClass)
 
-  val since = new DateTime().minusDays(2)
+  val since = new DateTime().minusDays(Config.property("angles.extractData.sinceDays").toInt)
   new CrawlUris().execute(since)
   new ExtractMetadata().execute(since)
   new ExtractNamedEntities().execute(since)

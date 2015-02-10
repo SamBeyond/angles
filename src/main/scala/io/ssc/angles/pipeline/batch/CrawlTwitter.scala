@@ -17,6 +17,7 @@
  */
 package io.ssc.angles.pipeline.batch
 
+import io.ssc.angles.Config
 import io.ssc.angles.pipeline._
 import org.joda.time.DateTime
 import org.slf4j.LoggerFactory
@@ -32,7 +33,7 @@ object CrawlTwitter extends App {
   work.enqueue(new FetchExplorers)
   work.enqueue(new FetchTimelines)
 
-  val since = new DateTime().minusDays(5)
+  val since = new DateTime().minusDays(Config.property("angles.crawlTwitter.sinceDays").toInt)
   do {
     try {
       val step = work.front

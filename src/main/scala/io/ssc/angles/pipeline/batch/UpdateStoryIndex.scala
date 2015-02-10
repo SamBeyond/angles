@@ -17,6 +17,7 @@
  */
 package io.ssc.angles.pipeline.batch
 
+import io.ssc.angles.Config
 import io.ssc.angles.pipeline._
 import org.joda.time.DateTime
 import org.slf4j.LoggerFactory
@@ -25,6 +26,6 @@ import twitter4j.TwitterException
 import scala.collection.mutable.Queue
 
 object UpdateStoryIndex extends App {
-  val since = new DateTime().minusDays(5)
+  val since = new DateTime().minusDays(Config.property("angles.updateStoryIndex.sinceDays").toInt)
   new IndexArticles().execute(since)
 }
