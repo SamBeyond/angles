@@ -20,10 +20,11 @@ package io.ssc.angles.pipeline.data
 
 import io.ssc.angles.Config
 import io.ssc.data._
+import org.joda.time.DateTime
 import org.slf4j.LoggerFactory
 import scalikejdbc._
-import twitter4j.{User, TwitterObjectFactory, Status}
-import org.joda.time.DateTime
+import twitter4j.{Status, TwitterObjectFactory, User}
+
 import scala.collection.mutable
 ;
 
@@ -265,6 +266,12 @@ object Storage {
     withSQL {
       insert.into(Explorer).values(user.getId, user.getScreenName, user.getName, user.getDescription)
     }.update.apply()
+  }
+  
+  def allTweetURIPairs() = {
+    sql"SELECT t.explorer_id, w.real_uri FROM tweets t JOIN crawled_websites w ON t.id = w.tweet_id;" map {
+      rs => (rs.string(1), rs.string(2))
+    } list() apply()
   }
 
   def notFollowedTweets() = {
