@@ -20,6 +20,13 @@ class GraphGenerator {
     (lhs, rhs) => lhs.dotProduct(rhs) / (lhs.getNorm * rhs.getNorm)
   }
 
+  // Sample implementation of extended jaccard similarity (http://strehl.com/diss/node56.html)
+  val EXT_JACCARD_SIMILARITY: (RealVector, RealVector) => Double = {
+    (lhs, rhs) => lhs.dotProduct(rhs) / (
+      (lhs.getNorm * lhs.getNorm) + (rhs.getNorm * rhs.getNorm) - lhs.dotProduct(rhs)
+      )
+  }
+
   /**
    * Calculate the graph from a given input set using given functions.
    *
@@ -58,7 +65,7 @@ class GraphGenerator {
       for ((rightId, rhs) <- explorerSpace) {
         if (ObjectUtils.notEqual(leftId, rightId) && !resultSet.contains((rightId, leftId)) && !resultSet.contains((leftId, leftId))) {
           val similarity: Double = similarityFunction(lhs, rhs)
-          if (similarity > 0)
+          if (similarity > 0.5)
             resultSet += (((leftId, rightId), similarity))
         }
       }
